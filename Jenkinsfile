@@ -9,6 +9,7 @@ pipeline {
             steps {
                 git branch: 'Paac', url: 'https://github.com/oayanda/Scripts_for_CI-Tools'
             }
+        }
         stage('Build') {
             steps{
                 sh 'mvn install -DskipTests'
@@ -22,7 +23,7 @@ pipeline {
 
         }
         
-        }
+        
         stage('UNIT TEST') {
             steps {
                 sh 'mvn test'
