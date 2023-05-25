@@ -7,11 +7,12 @@ pipeline {
     stages {
         stage('Fetch code') {
             steps {
-                git branch: 'vp-rem', url: 'https://github.com/devopshydclub/vprofile-project.git'
+                git branch: 'Paac', url: 'https://github.com/oayanda/Scripts_for_CI-Tools'
             }
+        }
         stage('Build') {
             steps{
-                sh 'mvn install -DskipTests'
+                sh 'mvn install'
             }
             post {
                 success {
@@ -22,7 +23,7 @@ pipeline {
 
         }
         
-        }
+        
         stage('UNIT TEST') {
             steps {
                 sh 'mvn test'
