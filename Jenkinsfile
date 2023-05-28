@@ -1,3 +1,7 @@
+def COLOR_MAP = [
+    'SUCCESS': 'good',
+    'FAILURE': 'danger',
+]
 pipeline {
     agent any
     tools {
@@ -60,7 +64,33 @@ pipeline {
                 }
             }
         }
-      
+        stage('UploadArtifact') {
+            steps {
+                    nexusArtifactUploader(
+                    nexusVersion: 'nexus3',
+                    protocol: 'http',
+                    nexusUrl: '172.31.91.240:8081',
+                    groupId: 'QA',
+                    version: "${env.BUILD_ID}-${env.BUILD_TIMESTAMP}",
+                    repository: 'vprofile-repo',
+                    credentialsId: 'nexuslogin',
+                    artifacts: [
+                        [artifactId: 'vprofileapp',
+                        classifier: '',
+                        file: 'target/vprofile-v2.war',
+                        type: 'war']
+                    ]
+                 )
+            }
+        }
         
+    }
+    post {
+        always {
+            echo 'Slack Notifications'
+            slackSend channel: '#jenkinsnotice',
+            color: COLOR_MAP[currentBuild.currentResult],
+            message: "*${currentBuild.currentResult}:* Job ${env.JOB_NAME} build ${env.BUILD_NUMBER} \n More info at: ${env.BUILD_URL}"
+        }
     }
 }
