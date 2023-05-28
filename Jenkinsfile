@@ -9,6 +9,11 @@ pipeline {
         jdk "OraceJDK8"
     }
     stages {
+        stage('Print Error') {
+            steps {
+                sh 'fake comment'
+            }
+        }
         stage('Fetch code') {
             steps {
                 git branch: 'Paac', url: 'https://github.com/oayanda/Scripts_for_CI-Tools'
